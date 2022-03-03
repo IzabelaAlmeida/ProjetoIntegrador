@@ -1,16 +1,18 @@
 package br.com.VozAtiva.VozAtiva.model;
 
-import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tb_tema")
@@ -28,8 +30,22 @@ public class TemaModel {
 	@Size(min = 3, max = 2000)
 	private String tipo;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date data = new java.sql.Date(System.currentTimeMillis());
+	@Size(min = 3, max = 255)
+	private String tag;
+	
+	
+
+	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("tema")
+	private List<PostagemModel> postagem;
+	
+	public List<PostagemModel> getPostagem() {
+		return postagem;
+	}
+
+	public void setPostagem(List<PostagemModel> postagem) {
+		this.postagem = postagem;
+	}
 
 	public long getId() {
 		return id;
@@ -55,12 +71,12 @@ public class TemaModel {
 		this.tipo = tipo;
 	}
 
-	public Date getData() {
-		return data;
+	public String getTag() {
+		return tag;
 	}
 
-	public void setData(Date data) {
-		this.data = data;
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 
 }
